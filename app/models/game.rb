@@ -71,16 +71,11 @@ class Game < ActiveRecord::Base
 		self.save!
   end
 
-  # def check_game_progress
-  # 	user_cards = self.card_sequence
-  # 	user_score = Game.scoreHand(user_cards)
-		# dealer_cards = self.dealer_card_sequence
-		# dealer_score = Game.scoreHand(dealer_cards)
-		# if user_score > 21
-		# 	self.is_won = false
-		# elsif self.state == "dealer_action"
-		# 	if dealer_score == 21
-		# 		self.is_won =
-  	
-  # end
+  def self.user_money_hash
+    users_won_money_hash = Game.group(:user_id).where(:is_won => true).sum("bet_amount * 2")
+    users_lost_money_hash = Game.group(:user_id).where(:is_won => false).sum("bet_amount * -1")
+    users_net_money_hash = {}
+    users_won_money_hash.merge(users_lost_money_hash){|k, old_v, new_v| old_v.to_i + new_v.to_i}.each_pair{|k,v| users_net_money_hash[k] = v.to_i}
+    return users_net_money_hash    
+  end
 end
