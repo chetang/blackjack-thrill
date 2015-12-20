@@ -115,6 +115,8 @@ class UsersController < ApplicationController
 
   def casino_profit
     @casino_win_loss_hash = Game.where('state = ?', 'over').group(:is_won).sum(:bet_amount)
+    @casino_win_loss_hash[false] ||= 0
+    @casino_win_loss_hash[true] ||= 0
     @profit = @casino_win_loss_hash[false] - @casino_win_loss_hash[true] * 2
   end
 
