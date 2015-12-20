@@ -1,0 +1,22 @@
+<h1>Listing users</h1>
+
+<table>
+  <tr>
+    <th>Email</th>
+    <th>Total Games Played</th>
+    <th>Won </th>
+    <th>Lost </th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= user.email %></td>
+    <td><%= user.games.count %></td>
+    <td><%= user.games.where(:is_won => true).count %></td>
+    <td><%= user.games.where(:is_won => false).count %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+<%= link_to "Home", root_url %> | <%= link_to "Stats", "/stats" %>

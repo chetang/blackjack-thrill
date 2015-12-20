@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ThrillBlackjack</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="container-fluid">
+<div class="navbar text-center" style="background-color: #D9D9D9;"><h1><%= link_to "Blackjack", root_url %></h1> </div>
+	<%= yield %>
+</div>
+</body>
+</html>

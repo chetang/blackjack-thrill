@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row">
+    <p id="notice"><%= notice %></p>
+  </div>
+
+  <div class="row text-center">
+    <p>
+      <b>User:</b>
+      <!-- <%= @game.user_id %> -->
+      <%= @game.user.email %>
+    </p>
+    <p>
+      <b>Bet amount:</b>
+      $ <%= @game.bet_amount %>
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="row text-center">
+        <strong style="font-size: 16px; text-decoration: underline;">Dealer Cards</strong>
+        <% @game.dealer_card_sequence.each_with_index do |card_number, index| %>
+          <% if @game.state == "user_action" and index > 0 %>
+            <p>hidden</p>
+          <% else %>
+            <% card = Card.new(card_number) %>
+            <div>
+              <%= card.name %>(<%= card.value %>)
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="row text-center">
+        <strong style="font-size: 16px; text-decoration: underline;">User Cards</strong>
+        <div class="user-cards-list">
+          <% @game.card_sequence.each do |card_number| %>
+            <% card = Card.new(card_number) %>
+            <div class="user-card">
+              <%= card.name %>(<%= card.value %>)
+            </div>
+          <% end %>
+        </div>
+        <% if @game.state == "user_action" %>
+          <button>
+            <%= link_to "HIT", draw_user_card_game_path(@game), remote: true %></button>
+          <button> 
+            <%= link_to "STAND", draw_dealer_card_game_path(@game) %></button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row text-center">
+    <%if @game.state == "over" %>
+      <% if @game.is_won %>
+        <p style="color: blue;">You Won $<%= @game.bet_amount * 2 %></p>
+      <% else %>
+        <p style="color: red;">You lost $<%= @game.bet_amount %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+
+  <%#= link_to 'Edit', edit_game_path(@game) %> 
+  <%#= link_to 'Back', games_path %>
+  <div class="row text-center">
+  <button>
+    <%= link_to 'New', new_game_path(game:{user: @game.user_id}) %>
+  </button>
+  <button>
+    <%= link_to 'Stats', "/stats"%>
+  </button>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+$(".stats-result").html("")
+var html = ""
+<% @counts.each do |count| %>
+  html += "<div><%= count[0] %> : <%= count[1] %></div>"
+<% end %>
+$(".stats-result").html(html)

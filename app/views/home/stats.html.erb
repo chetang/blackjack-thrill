@@ -1,0 +1,27 @@
+<div class="row">
+	<div style="width: 24%; float: left;margin-right: 1%;">
+		<ol>
+			<li>
+				<%= link_to "Players record", users_path %>
+			</li>
+			<li>
+				<%= link_to "Frequncy of cards who has played most number of games", card_frequency_users_path, :remote => true %>
+			</li>
+			<li>
+				<%= link_to "Who has most money", most_money_users_path, :remote => true %>
+			</li>
+			<li>
+				<%= link_to "Each user profit", each_user_profit_users_path, :remote => true %>
+			</li>
+			<li>
+				<%= link_to "Casino profit", casino_profit_users_path, :remote => true %>
+			</li>
+			<li>
+				<%= link_to "Users who hasn't played any game", no_game_users_path, :remote => true %>
+			</li>
+		</ol>
+	</div>
+	<div style="width: 74%; float: left;margin-left: 1%;">
+		<div class="stats-result"></div>		
+	</div>
+</div>

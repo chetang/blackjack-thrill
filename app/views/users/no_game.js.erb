@@ -1,0 +1,6 @@
+$(".stats-result").html("")
+var html = ""
+<% @inactive_users.each_with_index do |v, index| %>
+  html += "<div><%= index +1 %> : <%= v.email %></div>"
+<% end %>
+$(".stats-result").html(html)

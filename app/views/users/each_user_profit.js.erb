@@ -1,0 +1,6 @@
+$(".stats-result").html("")
+var html = ""
+<% @users_net_money_hash.each_pair do |k, v| %>
+  html += "<div><%= User.find(k).email %> : $ <%= v.to_s %></div>"
+<% end %>
+$(".stats-result").html(html)
