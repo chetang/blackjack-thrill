@@ -2,7 +2,7 @@
 	<div style="width: 24%; float: left;margin-right: 1%;">
 		<ol>
 			<li>
-				<%= link_to "Players record", users_path %>
+				<%= link_to "Players record", users_path, :remote => true %>
 			</li>
 			<li>
 				<%= link_to "Frequncy of cards who has played most number of games", card_frequency_users_path, :remote => true %>
