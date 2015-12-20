@@ -88,37 +88,37 @@ class UsersController < ApplicationController
   end
 
   def card_frequency
-    @user_game_count_hash = Game.group(:user_id).where(:state => 'over').count
-    @user_id = @user_game_count_hash.key(@user_game_count_hash.values.max)
-    @user = User.includes(:games).find(@user_id)
-    cards = @user.games.collect(&:card_sequence).flatten.sort
+    user_game_count_hash = Game.group(:user_id).where(:state => 'over').count
+    user_id = user_game_count_hash.key(user_game_count_hash.values.max)
+    user = User.includes(:games).find(user_id)
+    cards = user.games.collect(&:card_sequence).flatten.sort
     @counts = Hash.new(0)
     cards.each { |card| @counts[Card.new(card).name] += 1 }
     @counts
   end
 
   def most_money
-    @users_won_money_hash = Game.group(:user_id).where(:is_won => true).sum("bet_amount * 2")
-    @users_lost_money_hash = Game.group(:user_id).where(:is_won => false).sum("bet_amount * -1")
-    @users_net_money_hash = {}
-    @users_won_money_hash.merge(@users_lost_money_hash){|k, old_v, new_v| old_v.to_i + new_v.to_i}.each_pair{|k,v| @users_net_money_hash[k] = v.to_i}
-    @max_net_profit = @users_net_money_hash.values.max
-    @user_id = @users_net_money_hash.key(@max_net_profit)
-    @object = {@max_net_profit => @user_id}
+    users_won_money_hash = Game.group(:user_id).where(:is_won => true).sum("bet_amount * 2")
+    users_lost_money_hash = Game.group(:user_id).where(:is_won => false).sum("bet_amount * -1")
+    users_net_money_hash = {}
+    users_won_money_hash.merge(users_lost_money_hash){|k, old_v, new_v| old_v.to_i + new_v.to_i}.each_pair{|k,v| users_net_money_hash[k] = v.to_i}
+    max_net_profit = users_net_money_hash.values.max
+    user_id = users_net_money_hash.key(max_net_profit)
+    @object = {max_net_profit => user_id}
   end
 
   def each_user_profit
-    @users_won_money_hash = Game.group(:user_id).where(:is_won => true).sum("bet_amount * 2")
-    @users_lost_money_hash = Game.group(:user_id).where(:is_won => false).sum("bet_amount * -1")
+    users_won_money_hash = Game.group(:user_id).where(:is_won => true).sum("bet_amount * 2")
+    users_lost_money_hash = Game.group(:user_id).where(:is_won => false).sum("bet_amount * -1")
     @users_net_money_hash = {}
-    @users_won_money_hash.merge(@users_lost_money_hash){|k, old_v, new_v| old_v.to_i + new_v.to_i}.each_pair{|k,v| @users_net_money_hash[k] = v.to_i}
+    users_won_money_hash.merge(users_lost_money_hash){|k, old_v, new_v| old_v.to_i + new_v.to_i}.each_pair{|k,v| @users_net_money_hash[k] = v.to_i}
   end
 
   def casino_profit
-    @casino_win_loss_hash = Game.where('state = ?', 'over').group(:is_won).sum(:bet_amount)
-    @casino_win_loss_hash[false] ||= 0
-    @casino_win_loss_hash[true] ||= 0
-    @profit = @casino_win_loss_hash[false] - @casino_win_loss_hash[true] * 2
+    casino_win_loss_hash = Game.where('state = ?', 'over').group(:is_won).sum(:bet_amount)
+    casino_win_loss_hash[false] ||= 0
+    casino_win_loss_hash[true] ||= 0
+    @profit = casino_win_loss_hash[false] - casino_win_loss_hash[true] * 2
   end
 
   def no_game
