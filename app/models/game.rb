@@ -7,8 +7,6 @@ class Game < ActiveRecord::Base
 	validates_inclusion_of :state, :in => [ "user_action", "dealer_action", 'over' ]
 	validates_presence_of :bet_amount
 
-  # scope :user_net_profit, -> { group(:user_id).sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end") }
-
   def self.scoreHand(hand) #determines the score of the hand
     total=0
     aceCount=0
@@ -74,7 +72,12 @@ class Game < ActiveRecord::Base
   end
 
   def self.user_money_hash
-    users_net_money_hash = Game.group(:user_id).sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end")
+    users_net_money_hash = Game.joins(:user).group("email").sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end")
     return users_net_money_hash
+  end
+
+  def self.casino_balance
+    casino_balance = Game.where(:state => 'over').sum('case when is_won = true then bet_amount * -2 else bet_amount * 1 end')
+    return casino_balance
   end
 end
