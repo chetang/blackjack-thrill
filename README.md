@@ -15,3 +15,6 @@ e.g.
 
 Assignment to send rabl with various models and in random order:
   Create an object(@objects) in controller with all objects randomized but having an extra attribute called "object_type" saying what class the object belongs_to, which could be found from the objects while creating @objects.
+  
+  
+Visit https://fierce-lake-1063.herokuapp.com/ to see the project in work.
