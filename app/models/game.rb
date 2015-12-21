@@ -2,10 +2,12 @@ require 'card'
 class Game < ActiveRecord::Base
   attr_accessible :bet_amount, :card_sequence, :dealer_card_sequence, :is_won, :user_id, :state
   belongs_to :user
-  serialize :card_sequence, Array 
+  serialize :card_sequence, Array
   serialize :dealer_card_sequence, Array
 	validates_inclusion_of :state, :in => [ "user_action", "dealer_action", 'over' ]
 	validates_presence_of :bet_amount
+
+  # scope :user_net_profit, -> { group(:user_id).sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end") }
 
   def self.scoreHand(hand) #determines the score of the hand
     total=0
@@ -19,9 +21,9 @@ class Game < ActiveRecord::Base
          aceCount-=1
         end #end if
         break if aceCount == 0
-      end #end while     
+      end #end while
     end #end do
-    total 
+    total
   end #end scorehand
 
   def draw_card(draw_user_card = true)
@@ -72,10 +74,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.user_money_hash
-    users_won_money_hash = Game.group(:user_id).where(:is_won => true).sum("bet_amount * 2")
-    users_lost_money_hash = Game.group(:user_id).where(:is_won => false).sum("bet_amount * -1")
-    users_net_money_hash = {}
-    users_won_money_hash.merge(users_lost_money_hash){|k, old_v, new_v| old_v.to_i + new_v.to_i}.each_pair{|k,v| users_net_money_hash[k] = v.to_i}
-    return users_net_money_hash    
+    users_net_money_hash = Game.group(:user_id).sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end")
+    return users_net_money_hash
   end
 end
