@@ -90,7 +90,7 @@ class UsersController < ApplicationController
   def card_frequency
     user_game_count_hash = Game.group(:user_id).where(:state => 'over').count
     user_id = user_game_count_hash.key(user_game_count_hash.values.max)
-    cards = Game.joins(:user).where(games:{user_id:1}).pluck(:card_sequence).flatten.sort
+    cards = Game.joins(:user).where(games:{user_id:user_id}).pluck(:card_sequence).flatten.sort
     @counts = Hash.new(0)
     cards.each { |card| @counts[Card.new(card).name] += 1 }
     @counts
