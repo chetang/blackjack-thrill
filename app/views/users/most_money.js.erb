@@ -1,4 +1,4 @@
 $(".stats-result").html("")
 var html = ""
-html += "<div><%= User.find(@object.values[0]).email %> : $ <%= @object.keys[0].to_s %></div>"
+html += "<div><%= @object.values[0] %> : $ <%= @object.keys[0].to_s %></div>"
 $(".stats-result").html(html)

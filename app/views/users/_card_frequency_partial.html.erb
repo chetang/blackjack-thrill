@@ -1,0 +1,7 @@
+<% if @counts && @counts.length > 0 %>
+  <% @counts.each do |count| %>
+    <div><%= count[0]%> :  <%= count[1] %></div>
+  <% end %>
+<% else %>
+  <div class="row text-center"> No record found </div>
+<% end %>
