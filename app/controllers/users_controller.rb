@@ -87,7 +87,7 @@ class UsersController < ApplicationController
   def card_frequency
     user_game_count_hash = Game.group(:user_id).where(:state => 'over').count
     user_id = user_game_count_hash.key(user_game_count_hash.values.max)
-    cards = Game.joins(:user).where(games:{user_id:1}).pluck(:card_sequence).flatten.sort
+    cards = Game.joins(:user).where(games:{user_id:user_id}).pluck(:card_sequence).flatten.sort
     @counts = Hash.new(0)
     cards.each { |card| @counts[Card.new(card).name] += 1 }
     @counts
@@ -105,10 +105,7 @@ class UsersController < ApplicationController
   end
 
   def casino_profit
-    casino_win_loss_hash = Game.where('state = ?', 'over').group(:is_won).sum(:bet_amount)
-    casino_win_loss_hash[false] ||= 0
-    casino_win_loss_hash[true] ||= 0
-    @profit = casino_win_loss_hash[false] - casino_win_loss_hash[true] * 2
+    @profit = Game.casino_balance
   end
 
   def no_game
