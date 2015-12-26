@@ -2,12 +2,8 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.includes(:games).all
     respond_to :js
-    # respond_to do |format|
-    #   format.html # index.html.erb
-    #   format.json { render json: @users }
-    # end
   end
 
   # GET /users/1
@@ -47,24 +43,21 @@ class UsersController < ApplicationController
       @user = User.create(email: email)
       @user.save!
     end
-    current_user=(@user)
+    # current_user=(@user)
+    session[:current_user_id] = @user.id
     redirect_to controller: 'games', action: 'new', game: {user: @user}
   end
 
   # PUT /users/1
   # PUT /users/1.json
   def update
-    @user = User.find(params[:id])
-
-    respond_to do |format|
-      if @user.update_attributes(params[:user])
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if params[:user][:email]
+      @user = User.find_by_email(params[:user][:email])
+    else
+      @user = User.find(params[:id])
     end
+    session[:current_user_id] = @user.id
+    redirect_to controller: 'games', action: 'new', game: {user: @user}
   end
 
   # DELETE /users/1
@@ -79,8 +72,12 @@ class UsersController < ApplicationController
     end
   end
 
-  def login_user
-    @user = User.new
+  def login
+    if session && session[:current_user_id]
+      @user = User.find(session[:current_user_id])
+    else
+      @user = User.new
+    end
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @user }

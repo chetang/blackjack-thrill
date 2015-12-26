@@ -4,19 +4,19 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th style="    text-align: center;">Email</th>
-      <th style="    text-align: center;">Total Games Played</th>
-      <th style="    text-align: center;">Won </th>
-      <th style="    text-align: center;">Lost </th>
+      <th style="text-align: center;">Email</th>
+      <th style="text-align: center;">Total Games Played</th>
+      <th style="text-align: center;">Won </th>
+      <th style="text-align: center;">Lost </th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr>
         <td><%= user.email %></td>
-        <td><%= user.games.count %></td>
-        <td><%= user.games.where(:is_won => true).count %></td>
-        <td><%= user.games.where(:is_won => false).count %></td>
+        <td><%= user.games.length %></td>
+        <td><%= user.games.select{|game| game[:is_won] == true}.count %></td>
+        <td><%= user.games.select{|game| game[:is_won] == false}.count %></td>
       </tr>
     <% end %>
   </tbody>

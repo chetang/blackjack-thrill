@@ -1,11 +1,10 @@
 ThrillBlackjack::Application.routes.draw do
-  resources :games do 
+  resources :games, :except => [:edit, :delete] do 
     member do 
       get 'draw_user_card'
       get 'draw_dealer_card'
     end
   end
-
 
   resources :users do 
     collection do 
@@ -16,7 +15,7 @@ ThrillBlackjack::Application.routes.draw do
       get 'no_game'
     end
   end
-  match '/login_user' => 'users#login_user'
+  match '/login' => 'users#login'
   match '/stats' => 'home#stats'
   # The priority is based upon order of creation:
   # first created -> highest priority.

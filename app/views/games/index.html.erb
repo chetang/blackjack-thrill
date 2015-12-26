@@ -1,31 +1,35 @@
-<h1>Listing games</h1>
+<h1>Your games</h1>
+<%if @user %>
+    <% unless @games.blank? %>
+        <table class="table table-striped">
+          <tr>
+            <th>User</th>
+            <th>Won</th>
+            <th>Card sequence</th>
+            <th>Dealer card sequence</th>
+            <th>Bet amount</th>
+            <th></th>
+          </tr>
+        <% @games.each do |game| %>
+          <tr>
+            <td><%= game.user_id %></td>
+            <td><% if game.is_won %>YES<% else %>NO <%end%></td>
+            <td><%= game.cards_from_sequence(game.card_sequence) %> (<%= Game.scoreHand(game.card_sequence) %>)</td>
+            <td><%= game.cards_from_sequence(game.dealer_card_sequence) %> (<%= Game.scoreHand(game.dealer_card_sequence) %>)</td>
+            <td><%= game.bet_amount %></td>
+            <td><%= link_to 'Show', game %></td>
+          </tr>
+        <% end %>
+        </table>
 
-<table>
-  <tr>
-    <th>User</th>
-    <th>Is won</th>
-    <th>Card sequence</th>
-    <th>Dealer card sequence</th>
-    <th>Bet amount</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @games.each do |game| %>
-  <tr>
-    <td><%= game.user_id %></td>
-    <td><%= game.is_won %></td>
-    <td><%= game.card_sequence %></td>
-    <td><%= game.dealer_card_sequence %></td>
-    <td><%= game.bet_amount %></td>
-    <td><%= link_to 'Show', game %></td>
-    <td><%= link_to 'Edit', edit_game_path(game) %></td>
-    <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+        <br />
+        <% if @user %>
+            <%= link_to 'New Game', new_game_path(game:{user: @user.id}) %>
+        <% end %>
+    <% else %>
+        <div class="row text-center">No Games found.</div>
+    <% end %>
+<% else %>
+    <div class="row text-center">Please login.</div>
+    <%= link_to 'Login', "/login" %>
 <% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Game', new_game_path %>

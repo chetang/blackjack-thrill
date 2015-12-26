@@ -6,6 +6,15 @@ class Game < ActiveRecord::Base
   serialize :dealer_card_sequence, Array
 	validates_inclusion_of :state, :in => [ "user_action", "dealer_action", 'over' ]
 	validates_presence_of :bet_amount
+  validates :bet_amount, :numericality => {:greater_than_or_equal_to => 50, :less_than_or_equal_to => 500}, :presence => true
+  def cards_from_sequence(sequence)
+    cards = ""
+    unless sequence.blank?
+      cards = sequence.map{|seq| Deck.identCard(seq)}
+      cards = cards.join(", ")
+    end
+    return cards
+  end
 
   def self.scoreHand(hand) #determines the score of the hand
     total=0

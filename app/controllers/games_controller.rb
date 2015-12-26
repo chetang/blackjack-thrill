@@ -1,9 +1,19 @@
 class GamesController < ApplicationController
   # GET /games
   # GET /games.json
-  def index
-    @games = Game.all
 
+  def index
+    if session && session[:current_user_id].present?
+      current_user = User.find(session[:current_user_id])
+      if current_user
+        @games = Game.where(:user_id => current_user)
+        @user = current_user
+        return
+      end
+    else
+      @user = nil
+      @games = []
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @games }
@@ -40,8 +50,8 @@ class GamesController < ApplicationController
     @game = Game.new
     if params[:game][:user]
       @game.user_id = params[:game][:user]
-    elsif current_user
-      @game.user_id = current_user.id
+    elsif session && session[:current_user_id].present?
+      @game.user_id = session[:current_user_id]
     end
     respond_to do |format|
       format.html # new.html.erb
@@ -73,7 +83,6 @@ class GamesController < ApplicationController
   # PUT /games/1.json
   def update
     @game = Game.find(params[:id])
-
     respond_to do |format|
       if @game.update_attributes(params[:game])
         format.html { redirect_to @game, notice: 'Game was successfully updated.' }

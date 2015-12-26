@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-  	redirect_to :login_user
+  	redirect_to :login
   end
 
   def stats

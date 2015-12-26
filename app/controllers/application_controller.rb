@@ -1,15 +1,10 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  def set_current_user(user)
-  	self.current_user(user)
-  end
 
-  def current_user=(user)
-  	@current_user = user
-  end
-
+  private
+ 
   def current_user
-  	@current_user
+    @_current_user ||= session[:current_user_id] &&
+      User.find_by(id: session[:current_user_id])
   end
-
 end
