@@ -3,17 +3,19 @@
     <% unless @games.blank? %>
         <table class="table table-striped">
           <tr>
-            <th>User</th>
+            <th>Index</th>
+            <!-- <th>User</th> -->
             <th>Won</th>
-            <th>Card sequence</th>
-            <th>Dealer card sequence</th>
+            <th>Your Card sequences</th>
+            <th>Dealer card sequences</th>
             <th>Bet amount</th>
             <th></th>
           </tr>
-        <% @games.each do |game| %>
+        <% @games.each_with_index do |game, index| %>
           <tr>
-            <td><%= game.user_id %></td>
-            <td><% if game.is_won %>YES<% else %>NO <%end%></td>
+            <td><%= index+1 %></td>
+<!--             <td><%= game.user_id %></td>
+ -->            <td><% if game.is_won %>YES<% else %>NO <%end%></td>
             <td><%= game.cards_from_sequence(game.card_sequence) %> (<%= Game.scoreHand(game.card_sequence) %>)</td>
             <td><%= game.cards_from_sequence(game.dealer_card_sequence) %> (<%= Game.scoreHand(game.dealer_card_sequence) %>)</td>
             <td><%= game.bet_amount %></td>

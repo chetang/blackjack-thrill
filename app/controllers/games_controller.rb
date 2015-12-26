@@ -6,7 +6,7 @@ class GamesController < ApplicationController
     if session && session[:current_user_id].present?
       current_user = User.find(session[:current_user_id])
       if current_user
-        @games = Game.where(:user_id => current_user)
+        @games = Game.where(:user_id => current_user).where(:state => 'over')
         @user = current_user
         return
       end
@@ -59,11 +59,6 @@ class GamesController < ApplicationController
     end
   end
 
-  # GET /games/1/edit
-  def edit
-    @game = Game.find(params[:id])
-  end
-
   # POST /games
   # POST /games.json
   def create
@@ -91,18 +86,6 @@ class GamesController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @game.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /games/1
-  # DELETE /games/1.json
-  def destroy
-    @game = Game.find(params[:id])
-    @game.destroy
-
-    respond_to do |format|
-      format.html { redirect_to games_url }
-      format.json { head :no_content }
     end
   end
 

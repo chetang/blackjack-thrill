@@ -81,7 +81,7 @@ class Game < ActiveRecord::Base
   end
 
   def self.user_money_hash
-    users_net_money_hash = Game.joins(:user).group("email").sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end")
+    users_net_money_hash = Game.joins(:user).group("email").where(:state => 'over').sum("case when is_won = true then bet_amount * 2 else bet_amount * -1 end")
     return users_net_money_hash
   end
 

@@ -1,12 +1,12 @@
 ThrillBlackjack::Application.routes.draw do
-  resources :games, :except => [:edit, :delete] do 
+  resources :games, :except => [:edit, :destroy] do 
     member do 
       get 'draw_user_card'
       get 'draw_dealer_card'
     end
   end
 
-  resources :users do 
+  resources :users, :except => [:edit, :destroy] do 
     collection do 
       get 'card_frequency'
       get 'most_money'
@@ -15,8 +15,11 @@ ThrillBlackjack::Application.routes.draw do
       get 'no_game'
     end
   end
-  match '/login' => 'users#login'
+  match '/login' => 'users#new'
   match '/stats' => 'home#stats'
+
+  match '*path' => redirect('/')
+  # match '*path' => redirect('/')   unless Rails.env.development?
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

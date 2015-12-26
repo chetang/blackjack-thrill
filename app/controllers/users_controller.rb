@@ -3,7 +3,11 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.includes(:games).all
-    respond_to :js
+    # respond_to :js
+    respond_to do |format|
+      format.html # index.html.erb
+      format.js
+    end
   end
 
   # GET /users/1
@@ -20,30 +24,26 @@ class UsersController < ApplicationController
   # GET /users/new
   # GET /users/new.json
   def new
-    @user = User.new
-
+    if session && session[:current_user_id]
+      @user = User.find(session[:current_user_id])
+    else
+      @user = User.new
+    end
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @user }
     end
   end
 
-  # GET /users/1/edit
-  def edit
-    @user = User.find(params[:id])
-  end
-
   # POST /users
   # POST /users.json
   def create
     email = params[:user][:email]
-    # throw "Nil email" if email.blank?
     @user = User.find_by_email(email)
     if @user.nil?
       @user = User.create(email: email)
       @user.save!
     end
-    # current_user=(@user)
     session[:current_user_id] = @user.id
     redirect_to controller: 'games', action: 'new', game: {user: @user}
   end
@@ -58,18 +58,6 @@ class UsersController < ApplicationController
     end
     session[:current_user_id] = @user.id
     redirect_to controller: 'games', action: 'new', game: {user: @user}
-  end
-
-  # DELETE /users/1
-  # DELETE /users/1.json
-  def destroy
-    @user = User.find(params[:id])
-    @user.destroy
-
-    respond_to do |format|
-      format.html { redirect_to users_url }
-      format.json { head :no_content }
-    end
   end
 
   def login
@@ -95,8 +83,8 @@ class UsersController < ApplicationController
 
   def most_money
     users_net_money_hash = Game.user_money_hash
-    max_net_profit = users_net_money_hash.values.max
-    user_id = users_net_money_hash.key(max_net_profit)
+    max_net_profit = users_net_money_hash.values.map{|a| a.to_i}.max
+    user_id = users_net_money_hash.key(max_net_profit.to_s)
     @object = {max_net_profit => user_id}
   end
 
