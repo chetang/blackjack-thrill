@@ -62,13 +62,14 @@
     <% end %>
   </div>
 
-
+<% if @game.state != "user_action" %>
   <div class="row text-center">
-  <button>
-    <%= link_to 'New', new_game_path(game:{user: @game.user_id}) %>
-  </button>
-  <button>
-    <%= link_to 'Stats', "/stats"%>
-  </button>
+    <button>
+      <%= link_to 'New', new_game_path(game:{user: @game.user_id}) %>
+    </button>
+    <button>
+      <%= link_to 'Stats', "/stats"%>
+    </button>
+    </div>
   </div>
-</div>
+<% end %>
