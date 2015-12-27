@@ -60,18 +60,6 @@ class UsersController < ApplicationController
     redirect_to controller: 'games', action: 'new', game: {user: @user}
   end
 
-  def login
-    if session && session[:current_user_id]
-      @user = User.find(session[:current_user_id])
-    else
-      @user = User.new
-    end
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @user }
-    end
-  end
-
   def card_frequency
     user_game_count_hash = Game.group(:user_id).where(:state => 'over').count
     user_id = user_game_count_hash.key(user_game_count_hash.values.max)

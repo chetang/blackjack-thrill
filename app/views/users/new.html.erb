@@ -14,6 +14,9 @@
 	  <div class="field">
 	    <%= f.label :email %><br />
 	    <%= f.text_field :email %>
+	  	<% unless session[:current_user_id].nil? %>
+		    <p>* If you are not <%= @user.email %> , please enter your email to log in and play.</p>	
+		<% end %>
 	  </div>
 	  <div class="actions">
 	    <%= f.submit "Play" %>

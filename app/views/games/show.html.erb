@@ -6,7 +6,6 @@
   <div class="row text-center">
     <p>
       <b>User:</b>
-      <!-- <%= @game.user_id %> -->
       <%= @game.user.email %>
     </p>
     <p>
@@ -64,8 +63,6 @@
   </div>
 
 
-  <%#= link_to 'Edit', edit_game_path(@game) %> 
-  <%#= link_to 'Back', games_path %>
   <div class="row text-center">
   <button>
     <%= link_to 'New', new_game_path(game:{user: @game.user_id}) %>

@@ -23,6 +23,7 @@ class GamesController < ApplicationController
   # GET /games/1
   # GET /games/1.json
   def show
+    throw "Please log in before viewing the game" if session && session[:current_user_id].nil?
     @game = Game.find(params[:id])
     if @game.card_sequence.blank?
       @deck =  (1..52).to_a.shuffle
@@ -41,6 +42,14 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @game }
+    end
+  rescue => e
+    Rails.logger.debug "EXCEPTION:#{e}; backtrace=#{e.backtrace}"
+    @exception = e
+    @backtrace = e.backtrace
+    respond_to do |format|
+      format.html { render 'home/errors' }
+      format.json { render json: {error:e} }
     end
   end
 
