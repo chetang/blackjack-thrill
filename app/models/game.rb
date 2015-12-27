@@ -6,7 +6,9 @@ class Game < ActiveRecord::Base
   serialize :dealer_card_sequence, Array
 	validates_inclusion_of :state, :in => [ "user_action", "dealer_action", 'over' ]
 	validates_presence_of :bet_amount
-  validates :bet_amount, :numericality => {:greater_than_or_equal_to => 50, :less_than_or_equal_to => 500}, :presence => true
+  ALLOWED_BET_AMOUNTS = [50, 100, 200, 500]
+  validates :bet_amount, :inclusion => {:in => ALLOWED_BET_AMOUNTS, :message => " %{value} should be one of these #{ALLOWED_BET_AMOUNTS}."}, :presence => true
+
   def cards_from_sequence(sequence)
     cards = ""
     unless sequence.blank?

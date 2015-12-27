@@ -17,7 +17,10 @@
   </div>
   <div class="field">
     <%= f.label :bet_amount %><br />
-    <%= f.number_field :bet_amount, min: 50, max: 500 %>
+    <% Game::ALLOWED_BET_AMOUNTS.each do |val| %>
+      <%= f.radio_button :bet_amount, val %>
+      <%= f.label :bet_amount, val %>
+    <% end %>
   </div>
   <div class="actions">
     <%= f.submit "Deal" %>

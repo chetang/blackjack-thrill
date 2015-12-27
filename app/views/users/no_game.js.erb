@@ -1,5 +1,5 @@
 $(".stats-result").html("")
-var html = ""
+var html = "<h4 class='row text-center'>Users who hasn't played any game</h4>"
 <% if @inactive_users.length > 0 %>
 	<% @inactive_users.each_with_index do |v, index| %>
 	  html += "<div><%= index +1 %> : <%= v.email %></div>"
