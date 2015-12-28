@@ -53,6 +53,10 @@ class UsersController < ApplicationController
   def update
     if params[:user][:email]
       @user = User.find_by_email(params[:user][:email])
+      if @user.nil?
+        @user = User.create(email: params[:user][:email])
+        @user.save!
+      end
     else
       @user = User.find(params[:id])
     end
