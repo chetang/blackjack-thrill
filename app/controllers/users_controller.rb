@@ -25,10 +25,9 @@ class UsersController < ApplicationController
   # GET /users/new.json
   def new
     if session && session[:current_user_id]
-      @user = User.find(session[:current_user_id])
-    else
-      @user = User.new
+      @user = User.find_by_id(session[:current_user_id])
     end
+    @user ||= User.new
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @user }
