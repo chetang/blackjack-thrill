@@ -1,6 +1,10 @@
 $(".stats-result").html("")
 var html = "<h4 class='row text-center'>Users with their profit</h4>"
-<% @users_net_money_hash.each_pair do |k, v| %>
-  html += "<div><%= k %> : $ <%= v.to_s %></div>"
+<% if @users_net_money_hash.length > 0 %>
+  <% @users_net_money_hash.each_pair do |k, v| %>
+    html += "<div><%= k %> : $ <%= v.to_s %></div>"
+  <% end %>
+<% else %>
+  html += "<div class='row text-center'>No records found</div>"
 <% end %>
 $(".stats-result").html(html)

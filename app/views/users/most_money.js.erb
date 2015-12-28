@@ -1,4 +1,8 @@
 $(".stats-result").html("")
 var html = "<h4 class='row text-center'>User with most profit</h4>"
-html += "<div class='row text-center'><%= @object.values[0] %> : $ <%= @object.keys[0].to_s %></div>"
+<% if @object.nil? %>
+  html += "<div class='row text-center'>No records found</div>"
+<% else %>
+  html += "<div class='row text-center'><%= @object.values[0] %> : $ <%= @object.keys[0].to_s %></div>"
+<% end %>
 $(".stats-result").html(html)
