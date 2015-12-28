@@ -77,7 +77,7 @@ class UsersController < ApplicationController
     users_net_money_hash = Game.user_money_hash
     max_net_profit = users_net_money_hash.values.map{|a| a.to_i}.max
     user_id = users_net_money_hash.key(max_net_profit.to_s)
-    if @user_id && max_net_profit
+    if user_id && max_net_profit
       @object = {max_net_profit => user_id}
     else
       @object = nil
